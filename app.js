@@ -69,6 +69,7 @@ function fetchBookmarks() {
       },
     ];
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    fetchBookmarks();
   }
   buildBookmarks();
 }
@@ -80,6 +81,9 @@ function deleteBookmark(url) {
       bookmarks.splice(index, 1);
     } else {
       console.log('None Found');
+    }
+    if (bookmark === null) {
+      bookmarks.splice(index, 1);
     }
   });
   // Update bookmarks array in localStorage, re-populate DOM
