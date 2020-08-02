@@ -7,10 +7,30 @@ const websiteNameEl = document.getElementById('website-name');
 const websiteUrlEl = document.getElementById('website-url');
 const bookmarksContainer = document.getElementById('bookmarks-container');
 
+// Global Variables
+let bookmarks = [];
+
 // Show Modal, Focus on Input
 function showModal() {
   modal.classList.add('show-modal');
   websiteNameEl.focus();
+}
+
+// Fetch bookmarks
+function fetchBookmarks() {
+  // Get bookmarks from localStorage if available
+  if (localStorage.getItem('bookmarks')) {
+    bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+  } else {
+    // Create a bookmarks array in localStorage
+    bookmarks = [
+      {
+        name: 'Russ Perry Dev',
+        url: 'https://russperry.dev',
+      },
+    ];
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }
 }
 
 // Handle Data from form
@@ -24,6 +44,14 @@ function storeBookmark(e) {
   if (!validate(nameValue, urlValue)) {
     return false;
   }
+  const bookmark = {
+    name: nameValue,
+    url: urlValue,
+  };
+  bookmarks.push(bookmark);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  mookmarkForm.reset();
+  websiteNameEl.focus();
 }
 
 // Validate form
@@ -54,3 +82,6 @@ window.addEventListener('click', (e) => {
 
 // General Event Listners
 bookmarkForm.addEventListener('submit', storeBookmark);
+
+// Onload
+fetchBookmarks();
