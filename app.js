@@ -13,7 +13,37 @@ function showModal() {
   websiteNameEl.focus();
 }
 
-// Event listeners
+// Handle Data from form
+function storeBookmark(e) {
+  e.preventDefault();
+  const nameValue = websiteNameEl.value;
+  let urlValue = websiteUrlEl.value;
+  if (!urlValue.includes('http://', 'https://')) {
+    urlValue = `https://${urlValue}`;
+  }
+  if (!validate(nameValue, urlValue)) {
+    return false;
+  }
+}
+
+// Validate form
+function validate(nameVal, urlVal) {
+  const expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+  const regex = new RegExp(expression);
+  if (!nameVal || !urlVal) {
+    alert('Please submit values for both fields.');
+    return false;
+  }
+  if (!urlVal.match(regex)) {
+    alert('Please provide a valid web address.');
+    return false;
+  }
+
+  // Bookmark is Valid
+  return true;
+}
+
+// Modal Event listeners
 modalShow.addEventListener('click', showModal);
 modalClose.addEventListener('click', () => {
   modal.classList.remove('show-modal');
@@ -21,3 +51,6 @@ modalClose.addEventListener('click', () => {
 window.addEventListener('click', (e) => {
   e.target === modal ? modal.classList.remove('show-modal') : false;
 });
+
+// General Event Listners
+bookmarkForm.addEventListener('submit', storeBookmark);
